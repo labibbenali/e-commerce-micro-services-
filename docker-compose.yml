@@ -3,14 +3,14 @@ services:
     container_name: ms_ps_sql
     image: postgres:17.4
     environment:
-      POSTGRES_USER: app-user
-      POSTGRES_PASSWORD: app-user
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: appuser
       #where we will set up our postgres data
       PGDATA: /var/lib/postgresql/data
     volumes:
       - postgres:/var/lib/postgresql/data
     ports:
-      - 5432:5342 # host_porte:container_port
+      - 5118:5432 # host_porte:container_port
     networks:
       - microservices-net
     restart: unless-stopped
