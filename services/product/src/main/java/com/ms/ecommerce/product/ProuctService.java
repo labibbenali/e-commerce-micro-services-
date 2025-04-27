@@ -30,7 +30,7 @@ public class ProuctService {
         var productIds = request.stream()
                 .map(ProductPurchaseRequest::productId)
                 .toList();
-        //verify that all demanded product exist
+        //verify that all demanded products exist
         var storedProducts = repository.findAllByIdInOrderById(productIds);
         //if sizes are different, so there is some missing product not all demanded products are available
         if(productIds.size() != storedProducts.size()) {
