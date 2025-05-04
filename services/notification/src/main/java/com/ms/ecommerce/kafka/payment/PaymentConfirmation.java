@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 
 public record PaymentConfirmation(
         String orderReference,
-        BigDecimal amount,
+        BigDecimal totalAmount,
         PaymentMethod paymentMethod,
-        String customerFirstname,
-        String customerLastname,
+        String firstName,
+        String lastName,
         String customerEmail
 ) {
 }

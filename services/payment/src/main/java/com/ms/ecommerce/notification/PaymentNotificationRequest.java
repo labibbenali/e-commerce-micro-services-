@@ -6,10 +6,10 @@ import java.math.BigDecimal;
 
 public record PaymentNotificationRequest(
         String orderReference,
-        BigDecimal amount,
+        BigDecimal totalAmount,
         PaymentMethod paymentMethod,
-        String customerFirstName,
-        String customerLastName,
+        String firstName,
+        String lastName,
         String customerEmail
 ){
 }
