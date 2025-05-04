@@ -26,7 +26,7 @@ public class NotificationConsumer {
 
     @KafkaListener(topics = "payment-topic")
     public void consumePaymentSuccessNotification(PaymentConfirmation paymentConfirmation) throws MessagingException {
-        log.info("Consumming the message from payment Topic:: <{}>", paymentConfirmation);
+        log.info("Consuming the message from payment Topic:: <{}>", paymentConfirmation);
         notificationRepository.save(
                 Notification.builder()
                         .type(PAYMENT_CONFIRMATION)
@@ -34,17 +34,17 @@ public class NotificationConsumer {
                         .paymentConfirmation(paymentConfirmation)
                         .build()
         );
-       var customerName = paymentConfirmation.customerFirstname()+" "+paymentConfirmation.customerLastname();
+       var customerName = paymentConfirmation.firstName()+" "+paymentConfirmation.lastName();
        emailservice.sendPaymentSuccessEmail(
                paymentConfirmation.customerEmail(),
                customerName,
-               paymentConfirmation.amount(),
+               paymentConfirmation.totalAmount(),
                paymentConfirmation.orderReference()
        );
     }
     @KafkaListener(topics = "order-topic")
     public void consumeOrderConfirmationNotification(OrderConfirmation orderConfirmation) throws MessagingException {
-        log.info("Consumming the message from order-topic Topic:: <{}>", orderConfirmation);
+        log.info("Consuming the message from order-topic Topic:: <{}>", orderConfirmation);
         notificationRepository.save(
                 Notification.builder()
                         .type(ORDER_CONFIRMATION)
@@ -52,7 +52,7 @@ public class NotificationConsumer {
                         .orderConfirmation(orderConfirmation)
                         .build()
         );
-        var customerName = orderConfirmation.customer().firstname()+" "+orderConfirmation.customer().lastname();
+        var customerName = orderConfirmation.customer().firstName()+" "+orderConfirmation.customer().lastName();
         emailservice.senOrderConfirmationEmail(
                 orderConfirmation.customer().email(),
                 customerName,
