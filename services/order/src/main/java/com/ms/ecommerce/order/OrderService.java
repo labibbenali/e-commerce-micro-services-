@@ -4,7 +4,6 @@ import com.ms.ecommerce.customer.CustomerClient;
 import com.ms.ecommerce.exception.BusinessException;
 import com.ms.ecommerce.kafka.OrderConfirmation;
 import com.ms.ecommerce.kafka.OrderProducer;
-import com.ms.ecommerce.orderline.OrderLine;
 import com.ms.ecommerce.orderline.OrderLineRequest;
 import com.ms.ecommerce.orderline.OrderLineService;
 import com.ms.ecommerce.payment.PaymentClient;

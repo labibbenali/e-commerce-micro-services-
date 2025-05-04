@@ -10,9 +10,10 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
+@Table(name = "order_line")
 public class OrderLine {
     @Id
-    @SequenceGenerator(name = "orderLine_seq", sequenceName = "orderLine_seq", allocationSize = 1)
+    @SequenceGenerator(name = "order_line_seq", sequenceName = "order_line_seq", allocationSize = 1)
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
             generator = "orderLine_seq"

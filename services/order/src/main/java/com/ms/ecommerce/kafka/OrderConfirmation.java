@@ -8,8 +8,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public record OrderConfirmation(
-        String orderRefrence,
-        BigDecimal totalamount,
+        String orderReference,
+        BigDecimal totalAmount,
         PaymentMethod paymentMethod,
         CustomerResponse customer,
         List<PurchaseResponse> products
