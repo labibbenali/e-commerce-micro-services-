@@ -100,6 +100,14 @@ services:
       - 1080:1080
       - 1025:1025
 
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin:3.4.2
+    ports:
+      - 9411:9411
+    networks:
+      - microservices-net
+
 networks:
   microservices-net:
     driver: bridge
