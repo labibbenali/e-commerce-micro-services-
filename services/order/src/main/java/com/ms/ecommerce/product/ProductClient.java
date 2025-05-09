@@ -1,5 +1,6 @@
 package com.ms.ecommerce.product;
 
+import com.feign.common.KeycloakService;
 import com.ms.ecommerce.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,9 +26,14 @@ public class ProductClient {
     private final RestTemplate restTemplate;
     private final String ENDPOINT_PURCHASE = "/purchase";
 
+    private final KeycloakService keycloakService;
+
     public List<PurchaseResponse> purchaseProducts(List<PurchaseRequest> requestBody){
+        //recupêration de token keycloak
+        var token = keycloakService.getAccessToken();
         HttpHeaders headers = new HttpHeaders();
         headers.set(CONTENT_TYPE, APPLICATION_JSON_VALUE);
+        headers.set("Authorization",  token);
 
         HttpEntity<List<PurchaseRequest>> requestEntity = new HttpEntity<>(requestBody, headers);
 
