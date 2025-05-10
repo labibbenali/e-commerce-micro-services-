@@ -1,0 +1,130 @@
+services:
+  postgres:
+    container_name: ms_ps_sql
+    image: postgres:17.4
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: appuser
+      #where we will set up our postgres data
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5118:5432 # host_porte:container_port
+    networks:
+      - microservices-net
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: ms_pg_admin
+    image: dpage/pgadmin4:8.14
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin@pgadmin.org} #${VAR:default} mean if VAR is defined we will use it otherwise use default
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - 5050:80
+    networks:
+      - microservices-net
+    restart: unless-stopped
+  mongodb:
+    container_name: ms_mongo_db
+    image: mongo:8.0
+    ports:
+      - 27017:27017
+    environment:
+     - MONGO_INITDB_ROOT_USERNAME=app-user
+     - MONGO_INITDB_ROOT_PASSWORD=app-user
+    volumes:
+      - mongo:/data/db
+  mongo-express:
+    container_name: ms_mongo_express
+    image: mongo-express
+    restart: unless-stopped
+    ports:
+      - 8081:8081
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=app-user
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=app-user
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+
+#  kafka:
+#    container_name: kafka
+#    image: docker.io/bitnami/kafka:3.4
+#    environment:
+#      KAFKA_ENABLE_KRAFT: yes
+#      KAFKA_CFG_PROCESS_ROLES: broker,controller
+#      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+#      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+#      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+#      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://127.0.0.1:9092,EXTERNAL://kafka_b:9094
+#      KAFKA_BROKER_ID: 1
+#      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@127.0.0.1:9093
+#      ALLOW_PLAINTEXT_LISTENER: yes
+#      KAFKA_CFG_NODE_ID: 1
+#      KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
+#      BITNAMI_DEBUG: yes
+#      KAFKA_CFG_NUM_PARTITIONS: 2
+  kafka:
+    image: apache/kafka:4.0.0
+    hostname: kafka
+    container_name: kafka
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_NODE_ID: 1
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:29093
+      KAFKA_LISTENERS: PLAINTEXT://kafka:29092,CONTROLLER://kafka:29093,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+
+    ports:
+      - 9092:9092
+    networks:
+      - microservices-net
+
+  mail-dev:
+    container_name: ms_mail_dev
+    image: maildev/maildev
+    ports:
+      - 1080:1080
+      - 1025:1025
+
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin:3.4.2
+    ports:
+      - 9411:9411
+    networks:
+      - microservices-net
+  keycloak:
+    container_name: keycloak-ms
+    image: quay.io/keycloak/keycloak:24.0.2
+    ports:
+      - 9098:8080
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    networks:
+      - microservices-net
+    command:
+      - "start-dev"
+
+networks:
+  microservices-net:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
+  mongo:

@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: config-feign-common
+keycloak:
+  url: "http://localhost:9098/realms/micro-services/protocol/openid-connect/token"
+  client-id: "micro-services-api"
+  client-secret: "ehaqYlEJfnwrhOettDvp62TAI4XOGSt3"
+  grant-type: "client_credentials"

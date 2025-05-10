@@ -1,0 +1,20 @@
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+spring:
+  cloud:
+    config:
+      override.system-properties: false
+#zipkin config
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+keycloak:
+  url: "http://localhost:9098/realms/micro-services/protocol/openid-connect/token"
+  client-id: "micro-services-api"
+  client-secret: "ehaqYlEJfnwrhOettDvp62TAI4XOGSt3"
+  grant-type: "client_credentials"
