@@ -115,6 +115,12 @@ services:
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL_HOST: ms_ps_sql
+      KC_DB_URL_PORT: 5432
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: appuser
+      KC_DB_PASSWORD: appuser
     networks:
       - microservices-net
     command:
